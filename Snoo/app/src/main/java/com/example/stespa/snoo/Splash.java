@@ -33,7 +33,6 @@ public class Splash extends Activity {
             public void onPostExecute(String result)
             {
                 try {
-                    android.os.Debug.waitForDebugger();
                     ArrayList<RedditEntry> entries = new ArrayList<RedditEntry>();
                     Gson gson = new GsonBuilder().create();
 

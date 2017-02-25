@@ -27,4 +27,5 @@ dependencies {
     compile 'com.android.support:appcompat-v7:25.2.0'
     testCompile 'junit:junit:4.12'
     compile files('src/main/java/libs/gson-2.2.2.jar')
+    compile 'com.android.support:recyclerview-v7:25.1.1'
 }

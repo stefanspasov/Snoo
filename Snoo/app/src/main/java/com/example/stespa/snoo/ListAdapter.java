@@ -1,10 +1,9 @@
 package com.example.stespa.snoo;
 
-import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import java.util.List;
@@ -13,53 +12,42 @@ import java.util.List;
  * Created by stespa on 2017-02-24.
  */
 
-public class ListAdapter extends ArrayAdapter<RedditEntry>  {
+public class ListAdapter extends RecyclerView.Adapter<ListAdapter.MyViewHolder>  {
 
-    private static class VieHolder {
-        TextView txtName;
-        TextView txtType;
-        TextView txtVersion;
+    private List<RedditEntry> redditEntries;
+    public class MyViewHolder extends RecyclerView.ViewHolder {
+        public TextView title, score, subreddit;
+
+        public MyViewHolder(View view) {
+            super(view);
+            title = (TextView) view.findViewById(R.id.title);
+            subreddit = (TextView) view.findViewById(R.id.subreddit);
+            score = (TextView) view.findViewById(R.id.score);
+        }
     }
 
-    public ListAdapter(Context context, int textViewResourceId) {
-        super(context, textViewResourceId);
-    }
-
-    public ListAdapter(Context context, int resource, List<RedditEntry> items) {
-        super(context, resource, items);
+    public ListAdapter(List<RedditEntry> entries) {
+        this.redditEntries = entries;
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View itemView = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.reddit_entry, parent, false);
 
-        View v = convertView;
+        return new MyViewHolder(itemView);
+    }
 
-        if (v == null) {
-            LayoutInflater vi;
-            vi = LayoutInflater.from(getContext());
-            v = vi.inflate(R.layout.reddit_entry, null);
-        }
+    @Override
+    public void onBindViewHolder(MyViewHolder holder, int position) {
+        RedditEntry entry = redditEntries.get(position);
+        holder.title.setText(entry.getTitle());
+        holder.score.setText(Integer.toString(entry.getScore()));
+        holder.subreddit.setText(entry.getSubReddit());
+    }
 
-        RedditEntry p = getItem(position);
-
-        if (p != null) {
-            TextView tt1 = (TextView) v.findViewById(R.id.id);
-            TextView tt2 = (TextView) v.findViewById(R.id.categoryId);
-            TextView tt3 = (TextView) v.findViewById(R.id.description);
-
-            if (tt1 != null) {
-                tt1.setText(p.getTitle());
-            }
-
-            if (tt2 != null) {
-                tt2.setText(String.valueOf(p.getScore()));
-            }
-
-            if (tt3 != null) {
-                tt3.setText(p.getSubReddit());
-            }
-        }
-
-        return v;
+    @Override
+    public int getItemCount() {
+        return redditEntries.size();
     }
 }

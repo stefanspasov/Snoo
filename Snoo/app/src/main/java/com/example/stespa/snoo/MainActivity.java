@@ -2,16 +2,18 @@ package com.example.stespa.snoo;
 
 import android.content.Intent;
 import android.net.Uri;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
 
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-
+    private RecyclerView recyclerView;
+    private ListAdapter eAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -20,17 +22,23 @@ public class MainActivity extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         final   ArrayList<RedditEntry> list = (ArrayList<RedditEntry>)extras.getSerializable("entries");
 
-        ListAdapter customAdapter = new ListAdapter(this, R.layout.reddit_entry, list);
-        ListView yourListView = (ListView) findViewById(R.id.listViewEntries);
-        yourListView.setAdapter(customAdapter);
-        yourListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                RedditEntry dataModel= list.get(position);
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(dataModel.getUrl()));
-                startActivity(browserIntent);
-            }
-        });
+        recyclerView = (RecyclerView) findViewById(R.id.reddit_entries_view);
+        eAdapter = new ListAdapter(list);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+        recyclerView.setLayoutManager(mLayoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
+        recyclerView.setAdapter(eAdapter);
+        recyclerView.addOnItemTouchListener(
+               new RecyclerTouchListener(getApplicationContext() ,new RecyclerTouchListener.OnItemClickListener() {
+                     @Override public void onItemClick(View view, int position) {
+                           RedditEntry redditEntry= list.get(position);
+                           // Fixes "URI signature match failed" bug with Reddit
+                           String newUrl = redditEntry.getUrl().replaceAll("&amp;", "&");
+                           Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(newUrl));
+                           startActivity(browserIntent);
+                      }
+               })
+        );
     }
 }

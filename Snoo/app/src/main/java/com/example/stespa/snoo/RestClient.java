@@ -1,7 +1,5 @@
 package com.example.stespa.snoo;
-
 import android.os.AsyncTask;
-
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -17,20 +15,18 @@ public class RestClient extends AsyncTask<String, Integer, String> {
 
     @Override
     protected String doInBackground(String... params) {
-        if(android.os.Debug.isDebuggerConnected())
-            android.os.Debug.waitForDebugger();
         String targetURL = params[0];
         String query = params[1];
         URL url;
         HttpURLConnection connection = null;
         try {
-
             url = new URL(targetURL + "?" + query);
             connection = (HttpURLConnection) url.openConnection();
             InputStream in = new BufferedInputStream(connection.getInputStream());
             BufferedReader rd = new BufferedReader(new InputStreamReader(in));
+
             String line;
-            StringBuffer response = new StringBuffer();
+            StringBuilder response = new StringBuilder();
             while ((line = rd.readLine()) != null) {
                 System.out.println("response" + line);
                 response.append(line);
@@ -43,6 +39,7 @@ public class RestClient extends AsyncTask<String, Integer, String> {
             return null;
         } finally {
             if (connection != null) {
+                // TODO CLOSE ALL
                connection.disconnect();
             }
         }

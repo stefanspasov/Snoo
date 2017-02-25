@@ -6,7 +6,7 @@
         android:layout_height="wrap_content">
 
         <TextView android:textColor="#000000"
-            android:id="@+id/id"
+            android:id="@+id/title"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="id" android:textStyle="bold"
@@ -20,7 +20,7 @@
         android:layout_width="fill_parent">
 
         <TextView android:textColor="#000000"
-            android:id="@+id/categoryId"
+            android:id="@+id/score"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="categoryId"
@@ -32,7 +32,7 @@
             android:layout_weight="1"
             android:textColor="#000000"
             android:gravity="right"
-            android:id="@+id/description"
+            android:id="@+id/subreddit"
             android:text="description"
             android:height="20sp" />
     </TableRow>
