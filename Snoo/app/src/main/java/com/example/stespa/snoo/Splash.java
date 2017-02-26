@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -29,24 +30,32 @@ public class Splash extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash);
 
-        Context context = getApplicationContext();
-        if (!NetworkUtil.isConnected(context)) {
-            Toast.makeText(context, "Network is unavailable.", Toast.LENGTH_LONG).show();
-        }
-        else {
-            new RestClient() {
-                @Override
-                public void onPostExecute(String result) {
-                    try {
-                        Intent openStart = new Intent("android.intent.action.MAINPAGE");
-                        openStart.putExtra("entries", getRedditEntriesFromResult(result));
-                        startActivity(openStart);
-                    } catch (Exception e) {
-                        Log.e("splash", "Cannot open main page", e);
-                    }
+        final Context context = getApplicationContext();
+
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (!NetworkUtil.isConnected(context)) {
+                    Toast.makeText(context, "Network is unavailable.", Toast.LENGTH_SHORT).show();
+                    handler.postDelayed(this, 2000);
                 }
-            }.execute(mUrl, getQueryParams());
-        }
+                else {
+                    new RestClient() {
+                        @Override
+                        public void onPostExecute(String result) {
+                            try {
+                                Intent openStart = new Intent("android.intent.action.MAINPAGE");
+                                openStart.putExtra("entries", getRedditEntriesFromResult(result));
+                                startActivity(openStart);
+                            } catch (Exception e) {
+                                Log.e("splash", "Cannot open main page", e);
+                            }
+                        }
+                    }.execute(mUrl, getQueryParams());
+                }
+            }
+        }, 1500);
     }
 
     private ArrayList<RedditEntry> getRedditEntriesFromResult(String result) {
