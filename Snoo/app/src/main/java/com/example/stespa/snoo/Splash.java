@@ -3,12 +3,11 @@ package com.example.stespa.snoo;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.example.stespa.snoo.helpers.NetworkUtil;
 import com.example.stespa.snoo.helpers.RestClient;
 import com.example.stespa.snoo.models.RedditEntry;
 import com.example.stespa.snoo.models.RedditEntryJson;
@@ -30,9 +29,11 @@ public class Splash extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash);
 
-        if (!isConnected()) {
-            Toast.makeText(getApplicationContext(), "Network is unavailable.", Toast.LENGTH_LONG).show();
-        } else {
+        Context context = getApplicationContext();
+        if (!NetworkUtil.isConnected(context)) {
+            Toast.makeText(context, "Network is unavailable.", Toast.LENGTH_LONG).show();
+        }
+        else {
             new RestClient() {
                 @Override
                 public void onPostExecute(String result) {
@@ -82,12 +83,5 @@ public class Splash extends Activity {
             Log.e("splash", "Cannot get query parameters", e);
             return "";
         }
-    }
-
-    private boolean isConnected()
-    {
-        ConnectivityManager cm = (ConnectivityManager)getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
     }
 }
