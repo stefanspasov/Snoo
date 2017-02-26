@@ -1,4 +1,4 @@
 <resources>
     <string name="app_name">Snoo</string>
-    <string name="redditHeader">Reddit</string>
+    <string name="snooImage">Image of Snoo</string>
 </resources>

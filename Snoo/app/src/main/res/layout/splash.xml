@@ -6,8 +6,9 @@
     <ImageView
         android:id="@+id/startImage"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_height="0dp"
         android:layout_weight="1.0"
         android:gravity="center_vertical|center_horizontal"
-        android:src="@drawable/reddit" />
+        android:src="@drawable/reddit"
+        android:contentDescription="@string/snooImage"/>
 </LinearLayout>

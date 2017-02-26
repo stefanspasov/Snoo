@@ -3,7 +3,6 @@
     <color name="colorPrimary">#CEE3F8</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
-    <color name="colorHeader">#000000</color>
     <color name="colorTitle">#4F00FF</color>
     <color name="colorScore">#888888</color>
     <color name="colorSubreddit">#5F6A99</color>
